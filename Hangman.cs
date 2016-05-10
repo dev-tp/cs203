@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,14 +6,14 @@ public class Hangman
 {
     private static string ConstructSecretWord(string word)
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder builtWord = new StringBuilder();
         for (int i = 0; i < word.Length; i++) {
             if (word[i] != ' ')
-                sb.Append('*');
+                builtWord.Append('*');
             else
-                sb.Append(' ');
+                builtWord.Append(' ');
         }
-        return sb.ToString();
+        return builtWord.ToString();
     }
 
     private static bool CharacterInWord(string word, char character)
@@ -25,7 +24,7 @@ public class Hangman
         return false;
     }
 
-    private static List<int> IndexOccurrence(String word, char character)
+    private static List<int> IndexOccurrence(string word, char character)
     {
         List<int> indexOccurrance = new List<int>();
         for (int i = 0; i < word.Length; i++)
@@ -34,17 +33,17 @@ public class Hangman
         return indexOccurrance;
     }
 
-    private static string UpdateSecretWord(String secretWord, char character, List<int> indexOccurrence)
+    private static string UpdateSecretWord(string secretWord, char character, List<int> indexOccurrence)
     {
         char[] asterics = secretWord.ToCharArray();
-        foreach (var i in indexOccurrence) {
-            if (i == 0) {
-                asterics[i] = (char) (character - 32); // Uppercase first letter
+        foreach (var index in indexOccurrence) {
+            if (index == 0) {
+                asterics[index] = (char) (character - 32); // Uppercase first letter
             } else {
-                if (secretWord[i - 1] == ' ')
-                    asterics[i] = (char) (character - 32); // Uppercase letter after space
+                if (secretWord[index - 1] == ' ')
+                    asterics[index] = (char) (character - 32); // Uppercase letter after space
                 else
-                    asterics[i] = character;
+                    asterics[index] = character;
             }
         }
         return new string(asterics);
@@ -77,7 +76,7 @@ public class Hangman
                     if (!missedLetters.Contains(input))
                         missedLetters.Add(input);
                     if (--attempts == 0) {
-                        Console.WriteLine("You lose. The word was: {0}", word);
+                        Console.WriteLine("You lose! The word was: {0}", word);
                         break;
                     }
                 }
