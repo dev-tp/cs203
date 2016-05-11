@@ -17,8 +17,8 @@ public:
     explicit Canvas(QWidget *parent=0);
     ~Canvas();
 
-    void reset();
     void drawBranches(int order, int x=250, int y=250, int size=250);
+    void reset();
 
 protected:
     void paintEvent(QPaintEvent*);
