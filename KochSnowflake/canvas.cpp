@@ -11,12 +11,12 @@ Canvas::Canvas(QWidget *parent): QWidget(parent) {
 Canvas::~Canvas() {}
 
 void Canvas::reset() {
-    this->lines.clear();
+    lines.clear();
 }
 
 void Canvas::drawSnowflake(int n, int x0, int y0, int x1, int y1) {
     if (n == 0) {
-        this->lines.push_back(QLine(x0, y0, x1, y1));
+        lines.push_back(QLine(x0, y0, x1, y1));
     } else {
         int dx = x1 - x0;
         int dy = y1 - y0;
