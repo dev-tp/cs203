@@ -87,6 +87,12 @@ public class LinkedList<T> // where T : class
         this.Add(this.size, element);
     }
 
+    public void AddAll(params T[] elements)
+    {
+        foreach (var element in elements)
+            this.Add(element);
+    }
+
     public T RemoveFirst()
     {
         if (this.size == 0) {
@@ -100,6 +106,13 @@ public class LinkedList<T> // where T : class
                 this.tail = null;
             return temp.Data;
         }
+    }
+
+    public void Clear()
+    {
+        this.head = null;
+        this.tail = null;
+        this.size = 0;
     }
 
     public T RemoveLast()
@@ -148,10 +161,25 @@ public class LinkedList<T> // where T : class
         }
     }
 
-    // TODO Implement
     public T Remove(T element)
     {
-        return default(T);
+        if (this.head.Data.Equals(element))
+            return this.RemoveFirst();
+
+        if (this.tail.Data.Equals(element))
+            return this.RemoveLast();
+
+        Node<T> currentNode = this.head;
+        while (currentNode.Next != null && !currentNode.Next.Data.Equals(element)) {
+            currentNode = currentNode.Next;
+            if (currentNode.Next == null)
+                return default(T);
+        }
+
+        Node<T> temp = currentNode.Next;
+        currentNode.Next = (currentNode.Next).Next;
+        this.size--;
+        return temp.Data;
     }
 
     public override string ToString()
@@ -173,24 +201,25 @@ public class Test
 {
     public static void Main(string[] args)
     {
-        LinkedList<int> ints = new LinkedList<int>();
-        ints.Add(1);
-        ints.Add(2);
-        ints.Add(3);
-        ints.Add(1, 4);
-        ints.AddFirst(5);
-        ints.AddLast(6);
-        Console.WriteLine(ints);
-        Console.WriteLine("Current size: {0}", ints.Size);
+        LinkedList<string> abc = new LinkedList<string>();
+        abc.AddAll("a", "b", "c");
+        abc.Add(1, "d");
+        abc.AddFirst("e");
+        abc.AddLast("f");
+        Console.WriteLine("{0}\nCurrent size: {1}", abc, abc.Size);
 
-        ints.RemoveFirst();
-        Console.WriteLine(ints);
-        Console.WriteLine("Current size: {0}", ints.Size);
-        ints.RemoveLast();
-        Console.WriteLine(ints);
-        Console.WriteLine("Current size: {0}", ints.Size);
-        Console.WriteLine("Removed: {0}", ints.Remove(1));
-        Console.WriteLine(ints);
-        Console.WriteLine("Current size: {0}", ints.Size);
+        abc.RemoveFirst();
+        Console.WriteLine("{0}\nCurrent size: {1}", abc, abc.Size);
+        abc.RemoveLast();
+        Console.WriteLine("{0}\nCurrent size: {1}", abc, abc.Size);
+        Console.WriteLine("Removed: {0}", abc.Remove(1));
+        Console.WriteLine("{0}\nCurrent size: {1}", abc, abc.Size);
+        
+        abc.AddAll("h", "h", "g");
+        Console.WriteLine("{0}\nCurrent size: {1}", abc, abc.Size);
+
+        Console.WriteLine("Removed: {0}", abc.Remove("h"));
+        Console.WriteLine(abc.Remove("z")); // Should return null
+        Console.WriteLine("{0}\nCurrent size: {1}", abc, abc.Size);
     }
 }
