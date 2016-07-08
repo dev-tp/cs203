@@ -1,4 +1,4 @@
-import Glibc
+import Foundation
 
 func bubbleSort<T: Comparable>(inout list: [T]) {
     for i in 0..<list.count - 1 {
@@ -23,22 +23,21 @@ func insertionSort<T: Comparable>(inout list: [T]) {
 // Bottom-up mergesort
 func mergeSort<T: Comparable>(inout list: [T]) {
     var sideList: [T] = list // E[] sideList = (E[]) new Comparable[list.size()];
-    var i: Int = 1 // int i = 1;
-    while i < list.count { // while(i < list.length())
+    var i: Int = 1
+    while i < list.count {
         var j: Int = 0
         while j < list.count {
             mergeSort(&list, j, min(i + j, list.count), min(j + 2 * i, list.count), &sideList)
-            j = j + 2 * i
+            j += i * 2
         }
         list = sideList // System.arraycopy(sideList, 0, list, 0, list.length);
         i *= 2
     }
 }
 
-private func mergeSort<T: Comparable>(inout list: [T], _ leftIndex: Int,
-    _ rightIndex: Int, _ tip: Int, inout _ sideList: [T]) {
-
+private func mergeSort<T: Comparable>(inout list: [T], _ leftIndex: Int, _ rightIndex: Int, _ tip: Int, inout _ sideList: [T]) {
     var i = leftIndex, j = rightIndex, k = leftIndex
+
     while k < tip {
         if i < rightIndex && (j >= tip || list[i] <= list[j]) {
             sideList[k] = list[i]
@@ -55,7 +54,7 @@ func heapSort<T: Comparable>(inout list: [T]) {
     var n: Int = list.count
     var k: Int = n / 2
     while k >= 1 {
-        sync(&list, k, n) 
+        sync(&list, k, n)
         k -= 1
     }
     while n > 1 {
@@ -67,16 +66,17 @@ func heapSort<T: Comparable>(inout list: [T]) {
     }
 }
 
-private func sync<T: Comparable>(inout list: [T], var _ k: Int, _ n: Int) {
-    while 2 * k <= n {
-        var j: Int = 2 * k
+private func sync<T: Comparable>(inout list: [T], _ k: Int, _ n: Int) {
+    var m = k
+    while 2 * m <= n {
+        var j: Int = 2 * m
         if j < n && lessThan(list, j, j + 1) { j += 1 }
-        if !lessThan(list, k, j) { break }
+        if !lessThan(list, m, j) { break }
 
-        let temp = list[k - 1]
-        list[k - 1] = list[j - 1]
+        let temp = list[m - 1]
+        list[m - 1] = list[j - 1]
         list[j - 1] = temp
-        k = j
+        m = j
     }
 }
 
@@ -85,7 +85,8 @@ private func lessThan<T: Comparable>(list: [T], _ i: Int, _ j: Int) -> Bool {
 }
 
 func shuffle<T>(inout list: [T]) {
-    srand(UInt32(time(nil)))
+    // srand(UInt32(time(nil))) Glibc
+    srandom(UInt32(NSDate().timeIntervalSince1970))
     for i in 0..<list.count {
         let r: Int = random() % list.count
         if r != i {
@@ -109,11 +110,11 @@ private func quickSort<T: Comparable>(inout list: [T], _ leftIndex: Int, _ right
             i += 1
             j -= 1
         }
-
+        
         if leftIndex < j {
             quickSort(&list, leftIndex, j)
         }
-
+        
         if i < rightIndex {
             quickSort(&list, i, rightIndex)
         }
