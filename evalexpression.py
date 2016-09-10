@@ -1,13 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 
 class Stack(list):
     def peek(self):
         return self[len(self) - 1]
-
-    def push(self, item):
-        self.append(item)
 
     def not_empty(self):
         if len(self) != 0:
@@ -22,7 +19,7 @@ def evaluate_expression(expression):
     expression = insert_blanks(expression)  # Insert blanks around (, ), +, -, /, *, %, and ^
 
     tokens = expression.split(" ")
-    tokens = [token for token in tokens if token != '']  # Remove all white spaces
+    tokens = [token for token in tokens if token != ""]  # Remove all white spaces
 
     for token in tokens:
         if len(token) == 0:  # Blank space
@@ -34,22 +31,22 @@ def evaluate_expression(expression):
                      or operators.peek() == '*' or operators.peek() == '/' or operators.peek() == '%'
                      or operators.peek() == '^'):
                 process_an_operator(operands, operators)
-            operators.push(token[0])  # Push the + or - operator into the operator stack
+            operators.append(token[0])  # Append the + or - operator into the operator stack
 
         elif token[0] == '*' or token[0] == '/' or token[0] == '%':
             # Process all *, /, % in the top of the operator stack
             while operators.not_empty() and \
                     (operators.peek() == '*' or operators.peek() == '/' or operators.peek() == '%'):
                 process_an_operator(operands, operators)
-            operators.push(token[0])
+            operators.append(token[0])
 
         elif token[0] == '^':
             while operators.not_empty() and operators.peek() == '^':
                 process_an_operator(operands, operators)
-            operators.push(token[0])
+            operators.append(token[0])
 
         elif token[0] == '(':
-            operators.push('(')
+            operators.append('(')
 
         elif token.strip()[0] == ')':
             while operators.peek() != '(':
@@ -57,7 +54,7 @@ def evaluate_expression(expression):
             operators.pop()  # Pop ( from stack
 
         else:
-            operands.push(int(token))
+            operands.append(int(token))
 
     while operators.not_empty():  # Clear stacks; Process all the remaining operators in the stack
         process_an_operator(operands, operators)
@@ -71,17 +68,17 @@ def process_an_operator(operands, operators):
     b = operands.pop()
 
     if operator == '+':
-        operands.push(b + a)
+        operands.append(b + a)
     elif operator == '-':
-        operands.push(b - a)
+        operands.append(b - a)
     elif operator == '*':
-        operands.push(b * a)
+        operands.append(b * a)
     elif operator == '/':
-        operands.push(b / a)
+        operands.append(b / a)
     elif operator == '%':
-        operands.push(b % a)
+        operands.append(b % a)
     elif operator == '^':
-        operands.push(b ** a)
+        operands.append(b ** a)
 
 
 def insert_blanks(string):

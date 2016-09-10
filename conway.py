@@ -1,6 +1,9 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+from os import name, system
 from random import randint
 from time import sleep
-from os import name, system
 
 
 class Field(object):
@@ -9,7 +12,7 @@ class Field(object):
         self.height = height
         self.grid = [[False for i in range(width)] for j in range(height)]
 
-    def set(self, x, y, value):
+    def set_cell(self, x, y, value):
         self.grid[y][x] = value
 
     def alive(self, x, y):
@@ -19,13 +22,13 @@ class Field(object):
         y %= self.height
         return self.grid[y][x]
 
-    def next(self, x, y):
+    def neighbours(self, x, y):
         alive = 0
         for i in range(-1, 2):
             for j in range(-1, 2):
                 if (j != 0 or i != 0) and self.alive(x + i, y + j):
                     alive += 1
-        return alive == 3 or alive == 2 and self.alive(x, y)
+        return alive == 3 or (alive == 2 and self.alive(x, y))
 
 
 class Life(object):
@@ -36,12 +39,12 @@ class Life(object):
         self.height = height
 
         for _ in range(width * height / 4):
-            self.first_field.set(randint(0, width - 1), randint(0, height - 1), True)
+            self.first_field.set_cell(randint(0, width - 1), randint(0, height - 1), True)
 
     def step(self):
         for y in range(self.height):
             for x in range(self.width):
-                self.second_field.set(x, y, self.first_field.next(x, y))
+                self.second_field.set_cell(x, y, self.first_field.neighbours(x, y))
         self.first_field, self.second_field = self.second_field, self.first_field
 
     def __str__(self):

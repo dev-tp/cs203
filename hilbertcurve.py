@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 import math
@@ -17,14 +17,17 @@ class Window(QtGui.QWidget):
         self.input_text.returnPressed.connect(self.handle_event)
         display = QtGui.QPushButton("Display", self)
         display.clicked.connect(self.handle_event)
-        # self.connect(display, QtCore.SIGNAL("released()"), self, QtCore.SLOT("handle_event()"))
 
         container = QtGui.QHBoxLayout()
-        container.addSpacerItem(QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum))
+        container.addSpacerItem(QtGui.QSpacerItem(40, 20,
+                                QtGui.QSizePolicy.Expanding,
+                                QtGui.QSizePolicy.Minimum))
         container.addWidget(QtGui.QLabel("Enter an order:", self))
         container.addWidget(self.input_text)
         container.addWidget(display)
-        container.addSpacerItem(QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum))
+        container.addSpacerItem(QtGui.QSpacerItem(40, 20,
+                                QtGui.QSizePolicy.Expanding,
+                                QtGui.QSizePolicy.Minimum))
 
         self.canvas = Canvas()
         group = QtGui.QVBoxLayout()
@@ -37,16 +40,15 @@ class Window(QtGui.QWidget):
     @QtCore.pyqtSlot()
     def handle_event(self):
         value = self.input_text.text()
-        print value if Window._is_numeric(value) else "'%s' is not numeric!" % value
-        if Window._is_numeric(value):
+        if Window.is_value_numeric(value):
             self.canvas.reset()
             self.canvas.draw_curve(int(value) + 1)
             self.canvas.update()
 
     @staticmethod
-    def _is_numeric(string):
+    def is_value_numeric(value):
         try:
-            float(string)
+            float(value)
         except ValueError:
             return False
         return True
