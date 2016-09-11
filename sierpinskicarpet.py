@@ -17,15 +17,13 @@ class Window(QtGui.QWidget):
         display.clicked.connect(self.handle_event)
 
         container = QtGui.QHBoxLayout()
-        container.addSpacerItem(QtGui.QSpacerItem(40, 20,
-                                QtGui.QSizePolicy.Expanding,
-                                QtGui.QSizePolicy.Minimum))
+        container.addSpacerItem(QtGui.QSpacerItem(
+            40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum))
         container.addWidget(QtGui.QLabel("Enter an order:", self))
         container.addWidget(self.input_text)
         container.addWidget(display)
-        container.addSpacerItem(QtGui.QSpacerItem(40, 20,
-                                QtGui.QSizePolicy.Expanding,
-                                QtGui.QSizePolicy.Minimum))
+        container.addSpacerItem(QtGui.QSpacerItem(
+            40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum))
 
         self.canvas = Canvas()
         group = QtGui.QVBoxLayout()
@@ -40,7 +38,7 @@ class Window(QtGui.QWidget):
         value = self.input_text.text()
         if Window.is_value_numeric(value):
             self.canvas.reset()
-            self.canvas.draw_gasket(int(value))
+            self.canvas.draw_rectangle(int(value))
             self.canvas.update()
 
     @staticmethod
@@ -58,21 +56,21 @@ class Canvas(QtGui.QWidget):
         self.setMinimumSize(500, 500)
         self.rectangles = []
 
-    def draw_gasket(self, order, x=0, y=0, size=500):
+    def draw_rectangle(self, order, x=0, y=0, size=500):
         if order <= 0 or order > 6:
             return
 
         size /= 3
         self.rectangles.append(QtCore.QRect(x + size, y + size, size, size))
 
-        self.draw_gasket(order - 1, x, y, size)
-        self.draw_gasket(order - 1, x + size, y, size)
-        self.draw_gasket(order - 1, x + 2 * size, y, size)
-        self.draw_gasket(order - 1, x, y + size, size)
-        self.draw_gasket(order - 1, x + 2 * size, y + size, size)
-        self.draw_gasket(order - 1, x, y + 2 * size, size)
-        self.draw_gasket(order - 1, x + size, y + 2 * size, size)
-        self.draw_gasket(order - 1, x + 2 * size, y + 2 * size, size)
+        self.draw_rectangle(order - 1, x, y, size)
+        self.draw_rectangle(order - 1, x + size, y, size)
+        self.draw_rectangle(order - 1, x + size * 2, y, size)
+        self.draw_rectangle(order - 1, x, y + size, size)
+        self.draw_rectangle(order - 1, x + size * 2, y + size, size)
+        self.draw_rectangle(order - 1, x, y + size * 2, size)
+        self.draw_rectangle(order - 1, x + size, y + size * 2, size)
+        self.draw_rectangle(order - 1, x + size * 2, y + size * 2, size)
 
     def paintEvent(self, event):
         painter = QtGui.QPainter(self)
@@ -87,7 +85,7 @@ class Canvas(QtGui.QWidget):
 def main():
     app = QtGui.QApplication(["something_clever"])
     window = Window()
-    window.setWindowTitle("Sierpinski Carpet")
+    window.setWindowTitle("Sierpinski's Carpet")
     window.show()
     exit(app.exec_())
 
